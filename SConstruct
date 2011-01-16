@@ -52,6 +52,11 @@ build_date = datetime.datetime.today().strftime("%Y-%m-%d %H:%M")
 git_version = os.popen("git describe --always").read().strip()
 git_sha1 = os.popen("git rev-parse --verify HEAD").read().strip()
 
+if(git_version == ""):
+   git_version = "UNKNOWN"
+if(git_sha1 == ""):
+   git_sha1 == "UNKNOWN"
+
 print("Git commit version: " + git_version)
 
 env.Append(CPPDEFINES=['_BUILD_DATE=\\"' + build_date + '\\"'])
