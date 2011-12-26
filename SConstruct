@@ -59,9 +59,9 @@ if(git_sha1 == ""):
 
 print("Git commit version: " + git_version)
 
-env.Append(CPPDEFINES=['_BUILD_DATE=\\"' + build_date + '\\"'])
-env.Append(CPPDEFINES=['_GIT_VERSION=\\"' + git_version + '\\"'])
-env.Append(CPPDEFINES=['_GIT_SHA1=\\"' + git_sha1 + '\\"'])
+env.Append(CPPDEFINES=['BUILD_DATE=\\"' + build_date + '\\"'])
+env.Append(CPPDEFINES=['GIT_VERSION=\\"' + git_version + '\\"'])
+env.Append(CPPDEFINES=['GIT_SHA1=\\"' + git_sha1 + '\\"'])
 
 
 if int(debug_flag):

@@ -27,3 +27,4 @@ colladatest
 build/*
 *.swp
 program
+build/*
