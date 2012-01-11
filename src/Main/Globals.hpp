@@ -2,26 +2,21 @@
 #define G3TEST_GLOBALS_HPP_
 
 #include <string>
-using namespace std;
 
 class Globals {
    public:
-      const string& getBuildDate() const {
-         return build_date_;
-      }
-      const string& getGitVersion() const {
-         return git_version_;
-      }
-      const string& getGitSHA1() const {
-         return git_sha1_;
-      }
+      const std::string& getBuildDate() const;
+      const std::string& getGitVersion() const;
+      const std::string& getGitSHA1() const;
+      const std::string& getBuildType() const;
 
    private:
-      static const string build_date_;
-      static const string git_version_;
-      static const string git_sha1_;
+      static const std::string build_date_;
+      static const std::string git_version_;
+      static const std::string git_sha1_;
+      static const std::string build_type_;
 };
 
-extern Globals g;
+extern Globals globals;
 
 #endif /* G3TEST_GLOBALS_HPP_ */
