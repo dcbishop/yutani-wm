@@ -12,6 +12,8 @@ int main(int argc, char* argv[]) {
    	globals.getBuildDate().c_str()
    );
 
+   DEBUG_A("Debug: ON");
+
    LOG("Finished.");
    return 0;
 }
