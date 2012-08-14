@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 2.6)
 project(unnamed)
 
 # Projects default options
-option(C++11 "C++11" ON)
-option(Profile "Profile" OFF)
-option(Boost "Boost" OFF)
-option(Debug "Debug" OFF)
+option( C++11        "C++11"     ON  )
+option( Profile      "Profile"   OFF )
+option( Boost        "Boost"     OFF )
+option( Debug        "Debug"     OFF )
 
 # Add custom debug build compiler flags here...
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+#list(APPEND CMAKE_CXX_FLAGS_DEBUG "-O3")
 
 # Ensure that setting the debug option also sets the build type and visaversa
 if(Debug)
@@ -65,15 +65,15 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
    if(C++11)
       message("Enabling C++11 support...")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+      list(APPEND CMAKE_CXX_FLAGS "-std=c++0x")
       add_definitions(-DUSE_CPP11_)
    endif()
 
-   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Werror") #-Weffc++
+   list(APPEND CMAKE_CXX_FLAGS_RELEASE "-O3 -Werror") #-Weffc++
    
    if(Profile)
       message("Profiling: ON...")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+      list(APPEND CMAKE_CXX_FLAGS "-pg")
    endif()
 endif()
 
