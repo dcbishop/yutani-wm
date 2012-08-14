@@ -1,16 +1,48 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(unnamed)
+project(Unnamed)
+message("Project ${PROJECT_NAME}...")
 
-# Projects default options
+
+##############################
+#  Projects default options  #
+##############################
 option( C++11        "C++11"     ON  )
 option( Profile      "Profile"   OFF )
 option( Boost        "Boost"     OFF )
 option( Debug        "Debug"     OFF )
 
+
+###########################
+#  Some useful variables  #
+###########################
+set(SOURCES_SUBDIR src)
+set(HEADERS_SUBDIR src)
+set(SOURCES_DIRECTORY ${CMAKE_SOURCE_DIR}/${SOURCES_SUBDIR})
+set(HEADERS_DIRECTORY ${CMAKE_SOURCE_DIR}/${HEADERS_SUBDIR})
+set(CONFILE_FILENAME "Globals.hpp")
+set(CONFILE_SUBDIR "${HEADERS_SUBDIR}/Main")
+set(CONFILE_FILE "${PROJECT_SOURCE_DIR}/${CONFILE_SUBDIR}/${CONFILE_FILENAME}.in")
+string(TOLOWER ${PROJECT_NAME} LOWER_NAME)
+string(TOUPPER ${PROJECT_NAME} UPPER_NAME)
+set(BIN_NAME ${LOWER_NAME})
+
 # Add custom debug build compiler flags here...
 #list(APPEND CMAKE_CXX_FLAGS_DEBUG "-O3")
 
+
+#############################
+#  Set install directories  #
+#############################
+set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
+set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for dynamic libraries")
+set(INSTALL_ARCHIVE_DIR lib CACHE PATH "Installation directory for static libraries")
+set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
+
+
+###############
+#  Debugging  #
+###############
 # Ensure that setting the debug option also sets the build type and visaversa
 if(Debug)
    set(CMAKE_BUILD_TYPE "Debug")
@@ -23,14 +55,29 @@ if(Debug)
    add_definitions(-D_DEBUG)
 endif()
 
-# Note this is the 'bad' way of doing this, but the recommended alternative is
-# to keep a list of *all* source files =/
-file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
+
+#############################
+#  Find the stuff to build  #
+#############################
+# Note this is the 'bad' way of doing this, but the recommended 
+# alternative is to manually keep a list of *all* source files =/
+file(GLOB_RECURSE SOURCES "${SOURCES_DIRECTORY}/*.cpp")
+file(GLOB_RECURSE HEADERS "${HEADERS_DIRECTORY}/*.h*")
+
+include_directories("${HEADERS_DIRECTORY}/")
 
 # CMake modules
-set(CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}/cmake
-    ${CMAKE_MODULE_PATH})
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+
+###################################
+#  Pass variables to the program  #
+###################################
+
+# [TODO]: This should be done using config file with a custom .in rather than passing defines
+
+# Set the project name
+add_definitions(-DPROJECT_NAME_="${PROJECT_NAME}")
 
 # Set the defines
 # Build time define
@@ -44,7 +91,7 @@ if(CMAKE_BUILD_TYPE)
    message("Build type: ${CMAKE_BUILD_TYPE}")
 else()
    add_definitions(-DBUILD_TYPE_="Default")
-   message("Default build type...")
+   message(STATUS "Using default build type...")
 endif()
 
 # Git version info
@@ -64,7 +111,7 @@ endif()
 # Compiler specific flags...
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
    if(C++11)
-      message("Enabling C++11 support...")
+      message(STATUS "Enabling C++11 support...")
       list(APPEND CMAKE_CXX_FLAGS "-std=c++0x")
       add_definitions(-DUSE_CPP11_)
    endif()
@@ -72,13 +119,19 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
    list(APPEND CMAKE_CXX_FLAGS_RELEASE "-O3 -Werror") #-Weffc++
    
    if(Profile)
-      message("Profiling: ON...")
+      message(STATUS "Profiling: ON...")
       list(APPEND CMAKE_CXX_FLAGS "-pg")
    endif()
 endif()
 
-# The main executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+# Genearte config header file
+configure_file("${CONFILE_FILE}" "${PROJECT_BINARY_DIR}/${CONFILE_SUBDIR}/${CONFILE_FILENAME}" @ONLY)
+include_directories(${PROJECT_BINARY_DIR}/${CONFILE_SUBDIR})
+
+
+######################
+#  Handle libraries  #
+######################
 
 # Add Boost libs
 if(Boost)
@@ -86,7 +139,20 @@ if(Boost)
    if(Boost_FOUND)
       include_directories(${Boost_INCLUDE_DIRS})
       add_definitions(-DUSE_BOOST_)
-      target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+      list(APPEND COMMON_LIBS ${Boost_LIBRARIES})
    endif()
 endif()
 
+
+#######################
+#  Build the project  #
+#######################
+# The main executable
+add_executable(${BIN_NAME} ${SOURCES})
+target_link_libraries(${BIN_NAME} ${COMMON_LIBS})
+
+
+#############
+#  Install  #
+#############
+install(FILES ${PROJECT_BINARY_DIR}/${BIN_NAME} DESTINATION bin)
