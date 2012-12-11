@@ -129,7 +129,7 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
    if(C++11)
       message(STATUS "Enabling C++11 support...")
-      list(APPEND CMAKE_CXX_FLAGS "-std=c++0x")
+      list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
       add_definitions(-DUSE_CPP11_)
    endif()
 
