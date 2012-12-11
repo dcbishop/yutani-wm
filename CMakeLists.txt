@@ -1,3 +1,20 @@
+################################################################################
+# CMake file. - The CMake script for building the project.                     #
+################################################################################
+# Written in 2012 by David C. Bishop david@davidbishop.org                     #
+#                                                                              #
+# To the extent possible under law, the author(s) have dedicated all copyright #
+# and related and neighboring rights to this software to the public domain     #
+# worldwide. This software is distributed without any warranty.                #
+#                                                                              #
+# You should have received a copy of the CC0 Public Domain Dedication along    #
+# with this software. If not, see                                              #
+# <http://creativecommons.org/publicdomain/zero/1.0/>.                         #
+################################################################################
+# NOTE: The CC0 license applies only to this cmake file, not the entire        #
+# project (unless otherwise stated). I just like ensuring there is no problem  #
+# with people needing snippits of code for their CMake stuff.                  #
+################################################################################
 cmake_minimum_required(VERSION 2.6)
 
 project(Unnamed)
