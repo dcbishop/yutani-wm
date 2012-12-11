@@ -47,6 +47,10 @@ set(BIN_NAME ${LOWER_NAME})
 # Add custom debug build compiler flags here...
 #list(APPEND CMAKE_CXX_FLAGS_DEBUG "-O3")
 
+# Detect clang++ compiler
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+   set(CMAKE_COMPILER_IS_CLANGXX_)
+endif()
 
 #############################
 #  Set install directories  #
@@ -91,39 +95,23 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 #  Pass variables to the program  #
 ###################################
 
-# [TODO]: This should be done using config file with a custom .in rather than passing defines
-
-# Set the project name
-add_definitions(-DPROJECT_NAME_="${PROJECT_NAME}")
-
-# Set the defines
-# Build time define
+# Get build time
 include(GetDateTime)
 DATETIME(BUILD_DATETIME)
-add_definitions(-DBUILD_DATE_="${BUILD_DATETIME}")
 
 # Build type
 if(CMAKE_BUILD_TYPE)
-   add_definitions(-DBUILD_TYPE_="${CMAKE_BUILD_TYPE}")
    message("Build type: ${CMAKE_BUILD_TYPE}")
 else()
-   add_definitions(-DBUILD_TYPE_="Default")
    message(STATUS "Using default build type...")
 endif()
 
 # Git version info
 include(GetGitRevisionDescription)
 git_describe(GIT_DESCRIBE "--always")
-add_definitions(-DGIT_VERSION_="${GIT_DESCRIBE}")
 
-# Git SHA1 define
+# Get Git SHA1 hash
 get_git_head_revision(GIT_REFSPEC GIT_SHA1)
-add_definitions(-DGIT_SHA1_="${GIT_SHA1}")
-
-# Detect clang++ compiler
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-   set(CMAKE_COMPILER_IS_CLANGXX_)
-endif()
 
 # Compiler specific flags...
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
