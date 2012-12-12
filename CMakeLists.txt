@@ -49,7 +49,7 @@ set(BIN_NAME ${LOWER_NAME})
 
 # Detect clang++ compiler
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-   set(CMAKE_COMPILER_IS_CLANGXX_)
+   set(CMAKE_COMPILER_IS_CLANGXX_ TRUE)
 endif()
 
 #############################
