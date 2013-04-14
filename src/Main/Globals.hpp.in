@@ -3,32 +3,26 @@
 
 #include <string>
 
-#define @UPPER_NAME@_PROJECT_NAME "@PROJECT_NAME@"
-#define @UPPER_NAME@_BUILD_DATE "@BUILD_DATETIME@"
-#define @UPPER_NAME@_GIT_VERSION "@GIT_DESCRIBE@"
-#define @UPPER_NAME@_GIT_SHA1 "@GIT_SHA1@"
-#define @UPPER_NAME@_BUILD_TYPE "@CMAKE_BUILD_TYPE@"
-
 class Globals {
    public:
       static const std::string getProjectName() {
-         return @UPPER_NAME@_PROJECT_NAME;
+         return "@PROJECT_NAME@";
       }
 
       static const std::string getBuildDate() {
-         return @UPPER_NAME@_BUILD_DATE;
+         return "@BUILD_DATETIME@";
       }
 
       static const std::string getGitVersion() {
-         return @UPPER_NAME@_GIT_VERSION;
+         return "@GIT_DESCRIBE@";
       }
 
       static const std::string getGitSHA1() {
-         return @UPPER_NAME@_GIT_SHA1;
+         return "@GIT_SHA1@";
       }
 
       static const std::string getBuildType() {
-         return @UPPER_NAME@_BUILD_TYPE;
+         return "@CMAKE_BUILD_TYPE@";
       }
 };
 
