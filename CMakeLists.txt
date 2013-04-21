@@ -52,6 +52,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
    set(CMAKE_COMPILER_IS_CLANGXX_ TRUE)
 endif()
 
+# Generate compile_commands.json, useful for tools...
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
 #############################
 #  Set install directories  #
 #############################
