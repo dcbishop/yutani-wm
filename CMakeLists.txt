@@ -28,6 +28,7 @@ option( C++11        "C++11"     ON  )
 option( Profile      "Profile"   OFF )
 option( Boost        "Boost"     OFF )
 option( Debug        "Debug"     OFF )
+option( Testing      "Testing"   ON  )
 
 
 ###########################
@@ -35,8 +36,10 @@ option( Debug        "Debug"     OFF )
 ###########################
 set(SOURCES_SUBDIR src)
 set(HEADERS_SUBDIR src)
+set(TESTS_SUBDIR tests)
 set(SOURCES_DIRECTORY ${CMAKE_SOURCE_DIR}/${SOURCES_SUBDIR})
 set(HEADERS_DIRECTORY ${CMAKE_SOURCE_DIR}/${HEADERS_SUBDIR})
+set(TESTS_DIRECTORY ${CMAKE_SOURCE_DIR}/${TESTS_SUBDIR})
 set(CONFILE_FILENAME "Globals.hpp")
 set(CONFILE_SUBDIR "${HEADERS_SUBDIR}/Main")
 set(CONFILE_FILE "${PROJECT_SOURCE_DIR}/${CONFILE_SUBDIR}/${CONFILE_FILENAME}.in")
@@ -87,6 +90,7 @@ endif()
 # alternative is to manually keep a list of *all* source files =/
 file(GLOB_RECURSE SOURCES "${SOURCES_DIRECTORY}/*.cpp")
 file(GLOB_RECURSE HEADERS "${HEADERS_DIRECTORY}/*.h*")
+file(GLOB_RECURSE MAIN_SOURCE "${SOURCES_DIRECTORY}/Main.cpp")
 
 include_directories("${HEADERS_DIRECTORY}/")
 
@@ -164,3 +168,11 @@ target_link_libraries(${BIN_NAME} ${COMMON_LIBS})
 #  Install  #
 #############
 install(FILES ${PROJECT_BINARY_DIR}/${BIN_NAME} DESTINATION bin)
+
+
+#############
+#  Testing  #
+#############
+if(Testing)
+   add_subdirectory(${TESTS_SUBDIR})
+endif()
