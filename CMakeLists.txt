@@ -29,6 +29,7 @@ option( Profile      "Profile"   OFF )
 option( Boost        "Boost"     OFF )
 option( Debug        "Debug"     OFF )
 option( Testing      "Testing"   ON  )
+option( Coverage     "Coverage"  OFF )
 
 
 ###########################
@@ -133,6 +134,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
    if(Profile)
       message(STATUS "Profiling: ON...")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+   endif()
+
+   if(Coverage)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -O0")
+      link_libraries(gcov)
    endif()
 endif()
 
