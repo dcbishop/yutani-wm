@@ -127,6 +127,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
       message(STATUS "Enabling C++11 support...")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
       add_definitions(-DUSE_CPP11_)
+      add_definitions(-DGTEST_LANG_CXX11)
+
+      # Use clangs library
+      if(CMAKE_COMPILER_IS_CLANGXX_)
+         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+      endif()
+      list(APPEND COMMON_LIBS "-lc++abi")
    endif()
 
    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Werror") #-Weffc++
