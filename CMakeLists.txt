@@ -132,8 +132,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX_)
       # Use clangs library
       if(CMAKE_COMPILER_IS_CLANGXX_)
          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+         list(APPEND COMMON_LIBS "-lc++abi")
       endif()
-      list(APPEND COMMON_LIBS "-lc++abi")
    endif()
 
    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Werror") #-Weffc++
