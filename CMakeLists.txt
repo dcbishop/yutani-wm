@@ -37,7 +37,7 @@ option( Coverage     "Coverage"  OFF )
 ###########################
 set(SOURCES_SUBDIR src)
 set(HEADERS_SUBDIR src)
-set(TESTS_SUBDIR tests)
+set(TESTS_SUBDIR unittests)
 set(SOURCES_DIRECTORY ${CMAKE_SOURCE_DIR}/${SOURCES_SUBDIR})
 set(HEADERS_DIRECTORY ${CMAKE_SOURCE_DIR}/${HEADERS_SUBDIR})
 set(TESTS_DIRECTORY ${CMAKE_SOURCE_DIR}/${TESTS_SUBDIR})
