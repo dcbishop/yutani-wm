@@ -27,6 +27,7 @@ message("Project ${PROJECT_NAME}...")
 option( C++11               "C++11"               ON  )
 option( Profile             "Profile"             OFF )
 option( Boost               "Boost"               OFF )
+option( Warnings            "Warnings"            OFF )
 option( Debug               "Debug"               OFF )
 option( Testing             "Testing"             ON  )
 option( Coverage            "Coverage"            OFF )
@@ -85,6 +86,14 @@ endif()
 # Set _DEBUG #define for project
 if(Debug)
    add_definitions(-D_DEBUG)
+endif()
+
+
+#####################
+#  Enable Warnings  #
+#####################
+if(Warnings)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 endif()
 
 
