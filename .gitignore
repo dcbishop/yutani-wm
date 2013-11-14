@@ -29,3 +29,5 @@ build/*
 program
 build/*
 CMakeLists.txt.user*
+.*
+!.gitignore
