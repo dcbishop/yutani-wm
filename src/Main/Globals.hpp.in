@@ -30,4 +30,7 @@ class Globals {
 
 } /* namespace @PROJECT_NAME@ */
 
+// [TODO]: Remove this using in real projects. - 2013-11-25 07:39pm
+using namespace @PROJECT_NAME@;
+
 #endif /* @UPPER_NAME@_GLOBALS_HPP_ */
