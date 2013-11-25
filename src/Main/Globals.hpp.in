@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace @PROJECT_NAME@ {
+
 class Globals {
    public:
       static const std::string getProjectName() {
@@ -25,5 +27,7 @@ class Globals {
          return "@CMAKE_BUILD_TYPE@";
       }
 };
+
+} /* namespace @PROJECT_NAME@ */
 
 #endif /* @UPPER_NAME@_GLOBALS_HPP_ */
