@@ -6,26 +6,26 @@
 namespace @PROJECT_NAME@ {
 
 class Globals {
-   public:
-      static const std::string getProjectName() {
-         return "@PROJECT_NAME@";
-      }
+  public:
+    static const std::string getProjectName() {
+      return "@PROJECT_NAME@";
+    }
 
-      static const std::string getBuildDate() {
-         return "@BUILD_DATETIME@";
-      }
+    static const std::string getBuildDate() {
+      return "@BUILD_DATETIME@";
+    }
 
-      static const std::string getGitVersion() {
-         return "@GIT_DESCRIBE@";
-      }
+    static const std::string getGitVersion() {
+      return "@GIT_DESCRIBE@";
+    }
 
-      static const std::string getGitSHA1() {
-         return "@GIT_SHA1@";
-      }
+    static const std::string getGitSHA1() {
+      return "@GIT_SHA1@";
+    }
 
-      static const std::string getBuildType() {
-         return "@CMAKE_BUILD_TYPE@";
-      }
+    static const std::string getBuildType() {
+      return "@CMAKE_BUILD_TYPE@";
+    }
 };
 
 } /* namespace @PROJECT_NAME@ */
