@@ -25,10 +25,13 @@ doc/*
 tmp/*
 colladatest
 build/*
-*.swp
+*.sw?
+.hhhh
 program
 build/*
 CMakeLists.txt.user*
+CMakeCache.txt
+CMakeFiles/*
 .*
 !.gitignore
 compile_commands.json
