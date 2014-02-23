@@ -13,40 +13,36 @@ using namespace YutaniWM;
 XCBBackend::XCBBackend() {
   LOG("XCB Backend initializing...");
 
-  connectXCB();
-  is_connected = true;
+  initialize();
 
   LOG("XCB %d.%d connected... Screen %d",
       setup->protocol_major_version,
-      setup->protocol_minor_version, screen_id);
-
-  initialize();
+      setup->protocol_minor_version, getScreenId());
 }
 
 XCBBackend::~XCBBackend() {
   LOG("Disconnecting XCB...");
-  disconnectXCB();
 }
 
-void XCBBackend::connectXCB() {
+XCBBackend::XCBConnection::XCBConnection() {
   connection = xcb_connect(NULL, &screen_id);
   checkConnectionError();
+  is_connected = true;
 }
 
-void XCBBackend::disconnectXCB() noexcept {
+XCBBackend::XCBConnection::~XCBConnection() noexcept {
   if(is_connected) {
     xcb_disconnect(connection);
     is_connected = false;
   }
 }
 
-void XCBBackend::throwAndLogError(const std::string& error_message) {
+void YutaniWM::throwAndLogError(const std::string& error_message) {
     ERROR("%s", error_message.c_str());
-    disconnectXCB();
     throw std::runtime_error(error_message);
 }
 
-void XCBBackend::checkConnectionError() {
+void XCBBackend::XCBConnection::checkConnectionError() {
   if(xcb_connection_has_error(connection)) {
     throwAndLogError("XCB Connect failed...");
   }
@@ -68,13 +64,12 @@ void XCBBackend::setSetup() {
 
 void XCBBackend::setScreen() {
   auto iter = xcb_setup_roots_iterator(xcb_get_setup(connection));
-  for(int i = 0; i < screen_id; ++i) {
+  for(int i = 0; i < getScreenId(); ++i) {
     xcb_screen_next(&iter);
   }
 
   screen = iter.data;
   if(!screen) {
-    disconnectXCB();
     static const std::string error_message("XCB Connect failed...");
     throwAndLogError(error_message);
   }

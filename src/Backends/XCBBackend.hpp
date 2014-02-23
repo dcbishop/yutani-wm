@@ -6,6 +6,8 @@
 
 namespace YutaniWM {
 
+void throwAndLogError(const std::string& error_message);
+
 class XCBBackend {
  public:
   // No accidental casting
@@ -25,10 +27,20 @@ class XCBBackend {
   XCBBackend& operator=(XCBBackend&&) = delete;
 
  private:
-  void connectXCB();
-  void disconnectXCB() noexcept;
-  void checkConnectionError();
-  void throwAndLogError(const std::string& error_message);
+  // RAII
+  class XCBConnection {
+    public:
+      XCBConnection();
+      ~XCBConnection();
+      void checkConnectionError();
+      operator xcb_connection_t*() const noexcept { return connection; }
+      int getScreenId() const noexcept { return screen_id; }
+
+    private:
+      xcb_connection_t* connection;
+      bool is_connected = false;
+      int screen_id;
+  };
 
   void initialize();
   void setSetup();
@@ -37,10 +49,9 @@ class XCBBackend {
   void initializeMouseButtons();
   void initializeMouseButton(const int button);
   void initializeRoot();
+  int getScreenId() { return connection.getScreenId(); }
 
-  bool is_connected = false;
-  xcb_connection_t* connection;
-  int screen_id;
+  XCBConnection connection;
   xcb_screen_t* screen;
   const xcb_setup_t* setup;
   xcb_void_cookie_t cookie;
