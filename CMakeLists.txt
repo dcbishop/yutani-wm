@@ -27,6 +27,7 @@ message("Project ${PROJECT_NAME}...")
 option( C++11               "C++11"               ON  )
 option( Profile             "Profile"             OFF )
 option( Boost               "Boost"               OFF )
+option( XCB                 "XCB"                 ON  )
 option( Warnings            "Warnings"            OFF )
 option( Debug               "Debug"               OFF )
 option( Testing             "Testing"             ON  )
@@ -200,6 +201,18 @@ if(Boost)
    endif()
 endif()
 
+# Add XCB libraries
+if(XCB)
+  find_package(XCB REQUIRED)
+  if(XCB_FOUND)
+    message("DEBUG OK")
+    include_directories("${LIBXCB_INCLUDE_DIR}")
+    add_definitions(-DHAVE_XCB_)
+    list(APPEND COMMON_LIBS ${LIBXCB_LIBRARIES})
+  else()
+    message("DEBUG NOT OK")
+  endif()
+endif()
 
 #######################
 #  Build the project  #
