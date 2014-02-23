@@ -17,7 +17,7 @@
 ################################################################################
 cmake_minimum_required(VERSION 2.6)
 
-project(Unnamed)
+project(YutaniWM)
 message("Project ${PROJECT_NAME}...")
 
 
@@ -52,7 +52,7 @@ set(CONFILE_SUBDIR "${HEADERS_SUBDIR}/Main")
 set(CONFILE_FILE "${PROJECT_SOURCE_DIR}/${CONFILE_SUBDIR}/${CONFILE_FILENAME}.in")
 string(TOLOWER ${PROJECT_NAME} LOWER_NAME)
 string(TOUPPER ${PROJECT_NAME} UPPER_NAME)
-set(BIN_NAME ${LOWER_NAME})
+set(BIN_NAME "yutani")
 
 # Add custom debug build compiler flags here...
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O3")
