@@ -27,8 +27,8 @@ class XCBBackend {
  private:
   void connectXCB();
   void disconnectXCB() noexcept;
-  void checkConnectionError() const;
-  void throwAndLogError(const std::string& error_message) const;
+  void checkConnectionError();
+  void throwAndLogError(const std::string& error_message);
 
   void initialize();
   void setSetup();
@@ -36,11 +36,14 @@ class XCBBackend {
   void initializeEvents();
   void initializeMouseButtons();
   void initializeMouseButton(const int button);
+  void initializeRoot();
 
+  bool is_connected = false;
   xcb_connection_t* connection;
   int screen_id;
   xcb_screen_t* screen;
   const xcb_setup_t* setup;
+  xcb_void_cookie_t cookie;
 };
 
 } /* namespace YutaniWM */

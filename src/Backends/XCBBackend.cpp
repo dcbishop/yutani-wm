@@ -1,6 +1,9 @@
 #include "XCBBackend.hpp"
 
 #include <stdexcept>
+#include <array>
+#include <sstream>
+
 #include <xcb/xcb.h>
 
 #include "../Debug/console.h"
@@ -11,6 +14,7 @@ XCBBackend::XCBBackend() {
   LOG("XCB Backend initializing...");
 
   connectXCB();
+  is_connected = true;
 
   LOG("XCB %d.%d connected... Screen %d",
       setup->protocol_major_version,
@@ -30,15 +34,19 @@ void XCBBackend::connectXCB() {
 }
 
 void XCBBackend::disconnectXCB() noexcept {
-  xcb_disconnect(connection);
+  if(is_connected) {
+    xcb_disconnect(connection);
+    is_connected = false;
+  }
 }
 
-void XCBBackend::throwAndLogError(const std::string& error_message) const {
+void XCBBackend::throwAndLogError(const std::string& error_message) {
     ERROR("%s", error_message.c_str());
+    disconnectXCB();
     throw std::runtime_error(error_message);
 }
 
-void XCBBackend::checkConnectionError() const {
+void XCBBackend::checkConnectionError() {
   if(xcb_connection_has_error(connection)) {
     throwAndLogError("XCB Connect failed...");
   }
@@ -48,6 +56,7 @@ void XCBBackend::initialize() {
   setSetup();
   setScreen();
   initializeEvents();
+  initializeRoot();
 }
 
 void XCBBackend::setSetup() {
@@ -83,9 +92,9 @@ void XCBBackend::initializeEvents() {
 }
 
 void XCBBackend::initializeMouseButtons() {
-  initializeMouseButton(1);
-  initializeMouseButton(2);
-  initializeMouseButton(3);
+  initializeMouseButton(XCB_BUTTON_INDEX_1);
+  initializeMouseButton(XCB_BUTTON_INDEX_2);
+  initializeMouseButton(XCB_BUTTON_INDEX_3);
 }
 
 void XCBBackend::initializeMouseButton(const int button) {
@@ -99,4 +108,27 @@ void XCBBackend::initializeMouseButton(const int button) {
                   XCB_NONE,
                   button,
                   XCB_MOD_MASK_1);
+}
+
+void XCBBackend::initializeRoot() {
+  using std::array;
+  using std::stringstream;
+
+  static array<uint32_t, 1> values{{XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
+                                    XCB_EVENT_MASK_STRUCTURE_NOTIFY |
+                                    XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY}};
+  auto mask = XCB_CW_EVENT_MASK;
+
+  cookie = xcb_change_window_attributes_checked(
+      connection, screen->root, mask, values.data());
+
+  auto error = xcb_request_check(connection, cookie);
+
+  xcb_flush(connection);
+
+  if(NULL != error) {
+    stringstream ss;
+    ss << "Can't redirect root window: " << error->error_code << ". Another Window Manager Running?";
+    throwAndLogError(ss.str());
+  }
 }
