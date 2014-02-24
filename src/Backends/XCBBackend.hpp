@@ -37,9 +37,9 @@ class XCBBackend {
       int getScreenId() const noexcept { return screen_id; }
 
     private:
-      xcb_connection_t* connection;
+      xcb_connection_t* connection = nullptr;
       bool is_connected = false;
-      int screen_id;
+      int screen_id = -1;
   };
 
   void initialize();
@@ -52,8 +52,8 @@ class XCBBackend {
   int getScreenId() { return connection.getScreenId(); }
 
   XCBConnection connection;
-  xcb_screen_t* screen;
-  const xcb_setup_t* setup;
+  xcb_screen_t* screen = nullptr;
+  const xcb_setup_t* setup = nullptr;
   xcb_void_cookie_t cookie;
 };
 
