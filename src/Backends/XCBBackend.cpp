@@ -74,8 +74,6 @@ void XCBBackend::setScreen() {
     throwAndLogError(error_message);
   }
 
-  auto root = screen->root;
-
   DEBUG_M("Screen size: %dx%d, Root window id: %d",
       screen->width_in_pixels,
       screen->height_in_pixels,
