@@ -26,7 +26,9 @@ XCBBackend::~XCBBackend() {
 
 XCBBackend::XCBConnection::XCBConnection() {
   connection = xcb_connect(NULL, &screen_id);
-  checkConnectionError();
+  if(checkConnectionError()) {
+    throwAndLogError("XCB Connect failed...");
+  }
   is_connected = true;
 }
 
@@ -42,10 +44,11 @@ void YutaniWM::throwAndLogError(const std::string& error_message) {
     throw std::runtime_error(error_message);
 }
 
-void XCBBackend::XCBConnection::checkConnectionError() {
+bool XCBBackend::XCBConnection::checkConnectionError() const noexcept {
   if(xcb_connection_has_error(connection)) {
-    throwAndLogError("XCB Connect failed...");
+    return true;
   }
+  return false;
 }
 
 void XCBBackend::initialize() {
@@ -124,4 +127,24 @@ void XCBBackend::initializeRoot() {
     ss << "Can't redirect root window: " << error->error_code << ". Another Window Manager Running?";
     throwAndLogError(ss.str());
   }
+}
+
+void XCBBackend::eventLoop() {
+  LOG("Listenting to events");
+  while(true) {
+    auto event = xcb_poll_for_event(connection);
+    if(event == nullptr) {
+      if(connection.checkConnectionError()) {
+        LOG("XCB Disconnected.");
+        return;
+      }
+      continue;
+    }
+    handleEvent(event);
+  }
+}
+
+void XCBBackend::handleEvent(const xcb_generic_event_t* event) {
+  std::string name = event_names.at(event->response_type).c_str();
+  DEBUG_M("Recieved Event %s", name.c_str());
 }

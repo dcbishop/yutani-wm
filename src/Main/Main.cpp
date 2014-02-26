@@ -16,6 +16,7 @@ int main(int argc, char* argv[]) {
 
   try {
     XCBBackend backend;
+    backend.eventLoop();
   } catch(...) {
     ERROR("Fatal error");
     return 1;

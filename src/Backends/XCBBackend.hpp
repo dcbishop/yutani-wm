@@ -4,6 +4,8 @@
 #include <xcb/xcb.h>
 #include <string>
 
+#include "Names.hpp"
+
 namespace YutaniWM {
 
 void throwAndLogError(const std::string& error_message);
@@ -26,13 +28,15 @@ class XCBBackend {
   // Delete move assignemnt
   XCBBackend& operator=(XCBBackend&&) = delete;
 
+  void eventLoop();
+
  private:
   // RAII
   class XCBConnection {
     public:
       XCBConnection();
-      ~XCBConnection();
-      void checkConnectionError();
+      ~XCBConnection() noexcept;
+      bool checkConnectionError() const noexcept;
       operator xcb_connection_t*() const noexcept { return connection; }
       int getScreenId() const noexcept { return screen_id; }
 
@@ -50,6 +54,8 @@ class XCBBackend {
   void initializeMouseButton(const int button);
   void initializeRoot();
   int getScreenId() { return connection.getScreenId(); }
+  void handleEvent(const xcb_generic_event_t *ev);
+  void handleEvents();
 
   XCBConnection connection;
   xcb_screen_t* screen = nullptr;
